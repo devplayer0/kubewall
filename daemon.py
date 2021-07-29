@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import os.path
 import signal
 import subprocess
 
@@ -15,6 +16,7 @@ def on_signal(num, frame):
 class Handler(FileSystemEventHandler):
     def __init__(self, nft_file):
         self.nft_file = nft_file
+        self.real_nft_file = os.path.realpath(nft_file)
 
     def apply(self):
         log(f'Applying nftables rules from {self.nft_file}')
@@ -30,7 +32,7 @@ class Handler(FileSystemEventHandler):
         log(f'moved {event}')
     def on_modified(self, event: FileSystemEvent):
         log(f'modified {event}')
-        if event.is_directory or event.src_path != self.nft_file:
+        if event.is_directory or event.src_path != self.real_nft_file:
             return
 
         self.apply()
@@ -43,7 +45,7 @@ h = Handler(sys.argv[1])
 h.apply()
 
 observer = Observer()
-observer.schedule(h, h.nft_file)
+observer.schedule(h, h.real_nft_file)
 observer.start()
 
 signal.signal(signal.SIGINT, on_signal)
