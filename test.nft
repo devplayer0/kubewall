@@ -1,0 +1,12 @@
+#!/usr/bin/nft -f
+flush ruleset
+
+table inet filter {
+  chain input {
+    type filter hook input priority 0; policy accept;
+
+    icmp type echo-request counter
+  }
+}
+
+# vim:set ts=2 sw=2 et:
