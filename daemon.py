@@ -36,12 +36,7 @@ class RulesWatcher(FileSystemEventHandler):
         self.__real_nft_file = os.path.realpath(self.nft_file)
         self.__watch = self.observer.schedule(self, self.__real_nft_file)
 
-    def on_created(self, event: FileSystemEvent):
-        log(f'created {event}')
-    def on_moved(self, event: FileSystemEvent):
-        log(f'moved {event}')
     def on_modified(self, event: FileSystemEvent):
-        log(f'modified {event}')
         if event.is_directory or event.src_path != self.__real_nft_file:
             return
 
