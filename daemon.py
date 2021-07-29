@@ -19,6 +19,7 @@ class Handler(FileSystemEventHandler):
     def apply(self):
         log(f'Applying nftables rules from {self.nft_file}')
         try:
+            subprocess.check_call(['nft', '-c', '-f', self.nft_file])
             subprocess.check_call(['nft', '-f', self.nft_file])
         except subprocess.CalledProcessError:
             log('Failed to apply rules!')
