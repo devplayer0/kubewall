@@ -24,7 +24,12 @@ class Handler(FileSystemEventHandler):
         except subprocess.CalledProcessError:
             log('Failed to apply rules!')
 
+    def on_created(self, event: FileSystemEvent):
+        log(f'created {event}')
+    def on_moved(self, event: FileSystemEvent):
+        log(f'moved {event}')
     def on_modified(self, event: FileSystemEvent):
+        log(f'modified {event}')
         if event.is_directory or event.src_path != self.nft_file:
             return
 
